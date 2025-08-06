@@ -279,3 +279,15 @@ Multiple distributions started already to integrate the package. You can directl
 | SUSE         | SLES 15 SP5 or newer          |
 | RedHat       | RHEL 9.6 or newer             |
 | Ubuntu       | Ubuntu 25.04 or newer         |
+
+If you receive the error below, please see the workaround:
+ERROR - Mismatch in resource disk support between original VM size (Standard_E16ds_v5) and new VM size (Standard_E16ds_v6). 
+Workaround: 
+1. Take a snap of the root disk
+2. Stop and Delete Server ( Do not delete disk and network interface. Do not check force)
+3. Create a disk from the snap – Grow to 150GB? (From 127)
+4. Create a VM from the disk. Choose a VM without resource disk like E2Sv5
+5. Run NVMe Migration
+   ./NVMe-Conversion.ps1 -ResourceGroupName <RG> -VMName <VM Name> -NewControllerType NVMe -VMSize Standard_E16ds_v6 -StartVM -WriteLogfile
+6. Rename server and attach old interface
+7. Fix /mnt/resource as needed
